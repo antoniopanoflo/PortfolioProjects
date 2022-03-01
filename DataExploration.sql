@@ -15,6 +15,7 @@ WHERE continent IS NOT NULL
 ORDER BY 3,4;
 */
 
+/* Initially exploring CovidDeaths data table */
 
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM coviddeaths
