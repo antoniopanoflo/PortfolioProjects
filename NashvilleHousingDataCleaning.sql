@@ -28,7 +28,7 @@ WHERE a.PropertyAddress IS NULL;
 UPDATE nashvillehousing a
 JOIN nashvillehousing b 
 	ON a.ParcelID = b.ParcelID
-    AND a.UniqueID <> b.UniqueID
+  	AND a.UniqueID <> b.UniqueID
 SET a.PropertyAddress = ifnull(a.PropertyAddress, b.PropertyAddress)
 WHERE a.PropertyAddress IS NULL;
 
@@ -89,7 +89,7 @@ order by 2;
 UPDATE Nashvillehousing
 SET soldasvacant = 
 CASE
-	WHEN soldasvacant = 'Y' THEN 'Yes'
+    WHEN soldasvacant = 'Y' THEN 'Yes'
     WHEN soldasvacant = 'N' THEN 'No'
     ELSE soldasvacant
 END ;
@@ -102,8 +102,8 @@ WITH RowNumCTE AS(
 SELECT *,
 ROW_NUMBER() OVER (
 PARTITION BY ParcelID, 
-			 PropertyAddress, 
-			 SalePrice, 
+ 	     PropertyAddress, 
+	     SalePrice, 
              SaleDate, 
              LegalReference
 			ORDER BY UniqueID) as row_num
@@ -118,11 +118,11 @@ WITH RowNumCTE AS (
 SELECT *,
 ROW_NUMBER() OVER (
 PARTITION BY ParcelID, 
-			 PropertyAddress, 
-			 SalePrice, 
+	     PropertyAddress, 
+	     SalePrice, 
              SaleDate, 
              LegalReference
-			ORDER BY UniqueID) as row_num
+	     ORDER BY UniqueID) as row_num
 FROM Nashvillehousing)
 DELETE FROM Nashvillehousing USING Nashvillehousing JOIN RowNumCTE ON Nashvillehousing.UniqueID = RowNumCTE.UniqueID
 WHERE RowNumCTE.row_num > 1;
