@@ -2,19 +2,6 @@
 DROP TABLE IF EXISTS PercentPopulationVaccinated;
 
 
-/*
--- Notice how there exists a section in the table where location = asia and yet another section where continent = asia.
-SELECT location, continent
-FROM coviddeaths
-WHERE location like '%asia%' or continent like '%asia%';
-
--- For future queries, we will do away with the section in the table where continent is NULL and location is Asia.
-SELECT * 
-FROM coviddeaths
-WHERE continent IS NOT NULL
-ORDER BY 3,4;
-*/
-
 /* Initially exploring CovidDeaths data table */
 
 SELECT location, date, total_cases, new_cases, total_deaths, population
