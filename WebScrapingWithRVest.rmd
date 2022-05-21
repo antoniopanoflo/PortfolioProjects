@@ -17,13 +17,13 @@ tables <- read_html(fullurl) %>%
   html_table(fill = TRUE)
 
 BloodTypeByCountry <- tables[[2]] %>%
-  cSplit("Country/Dependency", "[") %>% #Using '[' as delimiter to split and get rid of the brackets. 
-  subset(select = -c(`Country/Dependency_2`)) %>% #Removing the leftover column.
+  cSplit("Country/Dependency", "[") %>%                   #Using '[' as delimiter to split and get rid of the brackets. 
+  subset(select = -c(`Country/Dependency_2`)) %>%         #Removing the leftover column.
   rename(
-    `Country` = `Country/Dependency_1`,   #Adjusting column names.
+    `Country` = `Country/Dependency_1`,                   #Adjusting column names.
     `Population` = `Population[1]`
     ) %>%
-  select(c(`Country`, everything()))  #Reordering columns.
+  select(c(`Country`, everything()))                      #Reordering columns.
 ```
 
 ```{r}
