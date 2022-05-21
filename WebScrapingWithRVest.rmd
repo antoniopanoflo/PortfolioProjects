@@ -1,0 +1,12 @@
+```{r}
+library(rvest)
+library(tidyverse)
+```
+```{r}
+baseurl=("https://en.wikipedia.org/wiki/Blood_type_distribution_by_country")
+fullurl=URLencode(baseurl)
+tables = read_html(fullurl) %>% 
+  html_table(fill = TRUE)
+
+df = tables[[2]]
+```
