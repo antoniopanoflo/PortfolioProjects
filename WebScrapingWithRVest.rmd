@@ -1,19 +1,31 @@
 ---
-title: "Web Scraping With RVest"
+title: "Web Scraping With R"
 author: "Antonio Pano Flores"
 date: "5/20/2022"
 output: html_document
 ---
 
 ```{r}
-library(rvest)
 library(tidyverse)
+library(splitstackshape)
 ```
+
 ```{r}
-baseurl=("https://en.wikipedia.org/wiki/Blood_type_distribution_by_country")
-fullurl=URLencode(baseurl)
-tables = read_html(fullurl) %>% 
+baseurl <- "https://en.wikipedia.org/wiki/Blood_type_distribution_by_country"
+fullurl <- URLencode(baseurl)
+tables <- read_html(fullurl) %>% 
   html_table(fill = TRUE)
 
-df = tables[[2]]
+BloodTypeByCountry <- tables[[2]] %>%
+  cSplit("Country/Dependency", "[") %>% #Using '[' as delimiter to split and get rid of the brackets. 
+  subset(select = -c(`Country/Dependency_2`)) %>% #Removing the leftover column.
+  rename(
+    `Country` = `Country/Dependency_1`,   #Adjusting column names.
+    `Population` = `Population[1]`
+    ) %>%
+  select(c(`Country`, everything()))  #Reordering columns.
+```
+
+```{r}
+write.csv(BloodTypeByCountry,"C:\\Users\\ap3340\\Documents\\YOUR_STUFF\\Data_Analyst\\SQL_PROJECTS\\SQL_Portfolio\\BloodTypesByContinent\\bloodtypes.csv", row.names = FALSE)
 ```
