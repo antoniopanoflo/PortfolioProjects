@@ -150,6 +150,6 @@ FROM mentalhealth
 GROUP BY GPA;
 
 -- We can see that the higher the GPA, the more anxious the students are.
--- Surprising. This can indicate that the ones with lower GPA's simply don't care.
+-- Surprising. Could this indicate that the ones with lower GPA's simply don't care?
 
 
