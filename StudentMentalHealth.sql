@@ -110,6 +110,22 @@ GROUP BY Major
 ORDER BY Total_Students_In_Major DESC
 LIMIT 3;
 
+-- Of the students taking the 3 most popular majors, how many don't have any conditions?
+WITH Condition_Free AS (
+SELECT *,
+	CASE 
+    WHEN (Depression = 'NO' AND Anxiety = 'No' AND `Panic Attacks` = 'No') THEN 'True'
+    ELSE 'False' END AS NotSick
+FROM(
+SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
+FROM mentalhealth) AS Sub
+)
+SELECT Major, sum(NotSick = 'True') AS Not_Sick_Count , count(Major) AS Total_Students_In_Major
+FROM Condition_Free
+GROUP BY Major
+ORDER BY Total_Students_In_Major DESC
+LIMIT 3;
+
 
 -- Top Major For Males? Females?
 -- From the query below, we can see that BCS is the most popular major for Males and Engineering for Females
