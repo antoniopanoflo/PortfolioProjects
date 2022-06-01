@@ -9,6 +9,8 @@ Anxiety = Whether student believes to have anxiety.
 Panic Attacks = Whether student claims to have periodic panic attacks.
 Treatment = Whether students have chosen to seek out treatment for their condition.
 
+*/
+
 use projects;
 
 select * from mentalhealth;
