@@ -65,6 +65,10 @@ FROM mentalhealth
 GROUP BY Major
 ORDER BY 2 DESC;
 
+-- Trimming GPA.
+UPDATE mentalhealth 
+SET GPA = TRIM(GPA);
+
 
 /* ----------------------------------------------------------------------------------------------- */ 
 -- Exploring the data
@@ -110,6 +114,7 @@ GROUP BY Major
 ORDER BY Total_Students_In_Major DESC
 LIMIT 3;
 
+
 -- Of the students taking the 3 most popular majors, how many don't have any conditions?
 WITH Condition_Free AS (
 SELECT *,
@@ -136,3 +141,15 @@ SELECT
 FROM mentalhealth
 GROUP BY Major
 ORDER BY Male DESC, Female DESC;
+
+
+-- Which GPA range has the highest ratio of anxious students?
+SELECT RANK() OVER (ORDER BY GPA DESC) AS GPA_Rank, GPA, sum(Anxiety = "Yes") Total_Students_With_Anxiety, count(GPA) AS Total_Students_In_GPA_Range,
+sum(Anxiety = "Yes")/count(GPA) * 100 AS Percent_of_Anxious_Students
+FROM mentalhealth
+GROUP BY GPA;
+
+-- We can see that the higher the GPA, the more anxious the students are.
+-- Surprising. This can indicate that the ones with lower GPA's simply don't care.
+
+
