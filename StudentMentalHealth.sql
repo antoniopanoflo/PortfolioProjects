@@ -86,6 +86,29 @@ WHERE Married = 'Yes'
 GROUP BY Married;
 
 
+-- Of the students taking the 3 most popular majors, how many have 2 or more conditions?
+-- Using a Subquery within a CTE to extract this information
+select * from mentalhealth;
+
+WITH Conditions AS (
+SELECT *,
+	CASE 
+    WHEN (Depression = 'Yes' AND 		 Anxiety = 'YES') THEN 'Yes' 
+    WHEN (Depression = 'Yes' AND `Panic Attacks` = 'YES') THEN 'Yes' 
+	WHEN (Anxiety = 'Yes' 	 AND `Panic Attacks` = 'Yes') THEN 'Yes'  ELSE 'No' END AS Two_Or_More
+FROM(
+SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
+FROM mentalhealth
+ORDER BY Major DESC) AS Sub
+)
+SELECT Major, sum(Two_Or_More = 'Yes') AS Two_Or_More_Conditions, count(Major) AS Total_Students_In_Major,
+	round((sum(Two_Or_More = 'Yes')/count(Major)), 2) AS Percent_of_Students_With_Two_Or_More_Conditions
+FROM Conditions
+GROUP BY Major
+ORDER BY Total_Students_In_Major DESC
+LIMIT 3;
+
+
 -- Top Major For Males? Females?
 -- From the query below, we can see that BCS is the most popular major for Males and Engineering for Females
 SELECT
