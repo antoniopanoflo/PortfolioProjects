@@ -93,9 +93,10 @@ select * from mentalhealth;
 WITH Conditions AS (
 SELECT *,
 	CASE 
-    WHEN (Depression = 'Yes' AND 		 Anxiety = 'YES') THEN 'Yes' 
-    WHEN (Depression = 'Yes' AND `Panic Attacks` = 'YES') THEN 'Yes' 
-	WHEN (Anxiety = 'Yes' 	 AND `Panic Attacks` = 'Yes') THEN 'Yes'  ELSE 'No' END AS Two_Or_More
+    	WHEN (Depression = 'Yes' AND         Anxiety = 'YES') THEN 'Yes' 
+    	WHEN (Depression = 'Yes' AND `Panic Attacks` = 'YES') THEN 'Yes' 
+	WHEN (Anxiety = 'Yes' 	 AND `Panic Attacks` = 'Yes') THEN 'Yes'  
+	ELSE 'No' END AS Two_Or_More
 FROM(
 SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
 FROM mentalhealth
