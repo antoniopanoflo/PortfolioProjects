@@ -19,8 +19,6 @@ select * from mentalhealth;
 /* -------------------------------------------------------------------------------------------------------------- */ 
 -- Examining the data and ensuring that data is clean.
 
-select * from mentalhealth;
-
 ALTER TABLE mentalhealth 
 DROP COLUMN Timestamp,
 DROP COLUMN MyUnknownColumn;
@@ -51,16 +49,16 @@ RENAME COLUMN `Marital Status` TO `Married`;
 
 
 -- Adjusting a duplicate nursing major name and trimming any other potential Majors with trim().
-Select Major, count(Major)
-from mentalhealth
-group by Major
-order by 2 desc;
+SELECT Major, COUNT(Major)
+FROM mentalhealth
+GROUP BY Major
+ORDER BY 2 DESC;
 
 UPDATE mentalhealth 
 SET Major = TRIM(Major);
 
 -- Verifying that there are now two student counts under the same Nursing program.
-SELECT Major, count(Major)
+SELECT Major, COUNT(Major)
 FROM mentalhealth
 GROUP BY Major
 ORDER BY 2 DESC;
@@ -118,9 +116,9 @@ LIMIT 3;
 -- Of the students taking the 3 most popular majors, how many don't have any conditions?
 WITH Condition_Free AS (
 SELECT *,
-	CASE 
-    WHEN (Depression = 'NO' AND Anxiety = 'No' AND `Panic Attacks` = 'No') THEN 'True'
-    ELSE 'False' END AS NotSick
+    CASE 
+    WHEN (Depression = 'NO' AND Anxiety = 'No' AND `Panic Attacks` = 'No') 
+    THEN 'True' ELSE 'False' END AS NotSick
 FROM(
 SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
 FROM mentalhealth) AS Sub
@@ -136,8 +134,8 @@ LIMIT 3;
 -- From the query below, we can see that BCS is the most popular major for Males and Engineering for Females
 SELECT
     Major,
-    sum(Gender='Male') as Male,
-    sum(Gender='Female') as Female
+    sum(Gender='Male') AS Male,
+    sum(Gender='Female') AS Female
 FROM mentalhealth
 GROUP BY Major
 ORDER BY Male DESC, Female DESC;
