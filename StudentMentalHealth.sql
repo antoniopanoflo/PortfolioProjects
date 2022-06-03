@@ -149,7 +149,6 @@ SELECT RANK() OVER (ORDER BY GPA DESC) AS GPA_Rank, GPA,
 FROM mentalhealth
 GROUP BY GPA;
 
--- We can see that the higher the GPA, the more anxious the students are.
--- Surprising. Could this indicate that the ones with lower GPA's simply don't care?
+-- We can see that the higher the GPA, the more anxious the students are. An indication that these students have less overall interest, perhaps?
 
 
