@@ -9,10 +9,10 @@ Treatment = Whether students have chosen to seek out treatment for their conditi
 
 */
 
-use projects;
+USE projects;
 
-select * from descriptions;
-select * from conditions;
+SELECT * FROM descriptions;
+SELECT * FROM conditions;
 
 
 /* -------------------------------------------------------------------------------------------------------------- */ 
@@ -130,8 +130,8 @@ GROUP BY major
 ORDER BY male DESC, female DESC;
 
 -- Which GPA range has the highest ratio of anxious students?
-SELECT RANK() OVER (ORDER BY gpa DESC) as GPA_Rank, GPA, sum(anxiety = "Yes") total_students_with_anxiety, COUNT(gpa) AS total_students_in_gpa_range,
-sum(anxiety = "Yes")/COUNT(gpa) * 100 as percent_of_anxious_students
+SELECT RANK() OVER (ORDER BY gpa DESC) AS GPA_Rank, GPA, sum(anxiety = "Yes") total_students_with_anxiety, COUNT(gpa) AS total_students_in_gpa_range,
+sum(anxiety = "Yes")/COUNT(gpa) * 100 AS percent_of_anxious_students
 FROM descriptions
 JOIN conditions
 	ON id = match_id
