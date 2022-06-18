@@ -19,122 +19,123 @@ select * from conditions;
 -- Examining the data and ensuring that data is clean.
 
 ALTER TABLE conditions
-DROP COLUMN Match_ID;
+DROP COLUMN match_id
+;
 
 ALTER TABLE conditions
-ADD Match_ID text;
+ADD match_id text;
 
 SET @row_number = 0;
 UPDATE conditions
-SET Match_ID = (@row_number:=@row_number + 1);
+SET match_id = (@row_number:=@row_number + 1);
 
 
 -- Correcting capitalization on genders & respective titles on college years.
 UPDATE descriptions
-SET Gender = 
+SET gender = 
 CASE
-    WHEN Gender = 'female' THEN 'Female'
-    WHEN Gender = 'F' THEN 'Female'
-    WHEN Gender = 'male' THEN 'Male'
-    WHEN Gender = 'M' THEN 'Male'
-    ELSE Gender
+    WHEN gender = 'female' THEN 'Female'
+    WHEN gender = 'F' THEN 'Female'
+    WHEN gender = 'male' THEN 'Male'
+    WHEN gender = 'M' THEN 'Male'
+    ELSE gender
 END ;
 
 UPDATE descriptions
-SET Year = 
+SET year = 
 CASE
-    WHEN Year = 'year 1' THEN 'First Year'
-    WHEN Year = 'year 2' THEN 'Sophomore'
-    WHEN Year = 'year 3' THEN 'Junior'
-    WHEN Year = 'year 4' THEN 'Senior'
-    ELSE Year
+    WHEN year = 'year 1' THEN 'First Year'
+    WHEN year = 'year 2' THEN 'Sophomore'
+    WHEN year = 'year 3' THEN 'Junior'
+    WHEN year = 'year 4' THEN 'Senior'
+    ELSE year
 END ;
 
 ALTER TABLE conditions
-RENAME COLUMN `Marital Status` TO `Married`;
+RENAME COLUMN `Marital Status` TO `married`;
 
 
 -- Adjusting a duplicate nursing major name and trimming any other potential Majors with trim().
-SELECT Major, count(Major)
+SELECT major, count(major)
 FROM descriptions
-GROUP BY Major
+GROUP BY major
 ORDER BY 2 DESC;
 
 UPDATE descriptions 
-SET Major = TRIM(Major);
+SET major = TRIM(major);
 
 UPDATE descriptions 
-SET GPA = TRIM(GPA);
+SET gpa = TRIM(gpa);
 
 /* ----------------------------------------------------------------------------------------------- */ 
 -- Exploring the data
 
 -- Avg age for those married?
-SELECT avg(Age) AS Avg_Age, Married
+SELECT avg(age) AS avg_age, married
 FROM descriptions
 JOIN conditions
-	ON ID = Match_ID
-WHERE Married = 'Yes'
-GROUP BY Married;
+	ON id = match_id
+WHERE married = 'Yes'
+GROUP BY married;
 
 -- Of the students taking the 3 most popular majors, how many have 2 or more conditions? Their ratio from total students?
 -- Using a Subquery within a CTE to extract this information.
 WITH setup AS (
 SELECT *,
-	CASE 
-    WHEN (Depression = 'Yes' AND  Anxiety        = 'YES') THEN 'Yes' 
-    WHEN (Depression = 'Yes' AND `Panic Attacks` = 'YES') THEN 'Yes' 
-    WHEN (Anxiety    = 'Yes' AND `Panic Attacks` = 'Yes') THEN 'Yes'  ELSE 'No' END AS Two_Or_More
+    CASE 
+    WHEN (depression = 'Yes' AND  anxiety        = 'YES') THEN 'Yes' 
+    WHEN (depression = 'Yes' AND `panic attacks` = 'YES') THEN 'Yes' 
+    WHEN (anxiety    = 'Yes' AND `panic attacks` = 'Yes') THEN 'Yes'  ELSE 'No' END AS two_or_more
 FROM (
-SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
+SELECT major,year, depression, anxiety, `panic attacks`
 FROM descriptions
 JOIN conditions
-	ON descriptions.ID = conditions.Match_ID) AS Sub
+	ON descriptions.id = conditions.match_id) AS sub
 )
-SELECT Major, sum(Two_Or_More = 'Yes') AS Two_Or_More_Conditions, count(Major) AS Total_Students_In_Major,
-	round((sum(Two_Or_More = 'Yes')/count(Major)), 2) * 100 AS Percent_of_Students_With_Two_Or_More_Conditions
+SELECT major, sum(two_or_more = 'Yes') AS two_or_more_conditions, COUNT(major) AS total_students_in_major,
+	round((sum(two_or_more = 'Yes')/COUNT(major)), 2) * 100 AS percent_of_students_with_two_or_more_conditions
 FROM setup
-GROUP BY Major
-ORDER BY Total_Students_In_Major DESC
+GROUP BY major
+ORDER BY total_students_in_major DESC
 LIMIT 3;
 
 -- Of the students taking the 3 most popular majors, how many don't have any conditions?
-WITH Condition_Free AS (
+WITH condition_free AS (
 SELECT *,
 	CASE 
-    WHEN (Depression = 'NO' AND Anxiety = 'No' AND `Panic Attacks` = 'No') THEN 'True'
-    ELSE 'False' END AS NotSick
+    WHEN (depression = 'NO' AND anxiety = 'No' AND `panic attacks` = 'No') THEN 'True'
+    ELSE 'False' END AS notsick
 FROM(
-SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
+SELECT major,year, depression, anxiety, `panic attacks`
 FROM descriptions
 JOIN conditions
-	ON descriptions.ID = conditions.Match_ID) as Sub
+	ON descriptions.id = conditions.match_id) AS Sub
 )
-SELECT Major, sum(NotSick = 'True') as Not_Sick_Count , count(Major) as Total_Students_In_Major
-FROM Condition_Free
-GROUP BY Major
-ORDER BY Total_Students_In_Major DESC
+SELECT major, sum(notsick = 'True') AS not_sick_Count , COUNT(major) AS total_students_in_major
+FROM condition_free
+GROUP BY major
+ORDER BY total_students_in_major DESC
 LIMIT 3;
 
 -- Top Major For Males? Females?
 -- From the query below, we can see that BCS is the most popular major for Males and Engineering for Females
 SELECT
-    Major,
-    sum(Gender='Male') as Male,
-    sum(Gender='Female') as Female
+    major,
+    sum(Gender='Male') AS male,
+    sum(Gender='Female') AS female
 FROM descriptions
 JOIN conditions
-	ON ID = Match_ID
-GROUP BY Major
-ORDER BY Male DESC, Female DESC;
+	ON id = match_id
+GROUP BY major
+ORDER BY male DESC, female DESC;
 
 -- Which GPA range has the highest ratio of anxious students?
-SELECT RANK() OVER (ORDER BY GPA DESC) as GPA_Rank, GPA, sum(Anxiety = "Yes") Total_Students_With_Anxiety, count(GPA) as Total_Students_In_GPA_Range,
-sum(Anxiety = "Yes")/count(GPA) * 100 as Percent_of_Anxious_Students
+SELECT RANK() OVER (ORDER BY gpa DESC) as GPA_Rank, GPA, sum(anxiety = "Yes") total_students_with_anxiety, COUNT(gpa) AS total_students_in_gpa_range,
+sum(anxiety = "Yes")/COUNT(gpa) * 100 as percent_of_anxious_students
 FROM descriptions
 JOIN conditions
-	ON ID = Match_ID
-GROUP BY GPA;
+	ON id = match_id
+GROUP BY gpa;
 
 -- We can see that the higher the GPA, the more anxious the students are!
 -- Could this mean that those with low GPA's have a lack of interest / those with high GPA's are worried about upkeeping their scores?
