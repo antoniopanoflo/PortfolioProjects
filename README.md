@@ -4,8 +4,3 @@ In this portfolio, I have the latest projects I have been working on after havin
 
 
 
-
-Data Sources:
-https://ourworldindata.org/covid-deaths
-https://www.kaggle.com/datasets/danielgrijalvas/movies
-Nashville Data included above.
