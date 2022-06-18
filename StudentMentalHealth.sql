@@ -130,7 +130,7 @@ GROUP BY major
 ORDER BY male DESC, female DESC;
 
 -- Which GPA range has the highest ratio of anxious students?
-SELECT RANK() OVER (ORDER BY gpa DESC) AS GPA_Rank, GPA, sum(anxiety = "Yes") total_students_with_anxiety, COUNT(gpa) AS total_students_in_gpa_range,
+SELECT RANK() OVER (ORDER BY gpa DESC) AS gpa_rank, GPA, sum(anxiety = "Yes") total_students_with_anxiety, COUNT(gpa) AS total_students_in_gpa_range,
 sum(anxiety = "Yes")/COUNT(gpa) * 100 AS percent_of_anxious_students
 FROM descriptions
 JOIN conditions
