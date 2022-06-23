@@ -1,0 +1,119 @@
+---
+title: "1995 University Tuition"
+author: "Antonio Pano Flores"
+date: "6/23/2022"
+output: html_document
+---
+
+
+
+```{r}
+tuition = read.csv("tuition_final.csv")
+```
+
+### Creating an acceptance rate variable and filtering UNC-CH row from the dataset.
+```{r}
+tuition$Acc.Rate = (tuition$Accepted/tuition$Applied)*100
+
+tuition[tuition$Name == "University of North Carolina at Chapel Hill",]
+```
+
+### Plotting a simple linear regression with Tuition Price on SAT Scores.
+```{r}
+plot(tuition$Avg.SAT, tuition$Out.Tuition, main = "College Tuition Based on SAT Score", xlab = "SAT Score", ylab = "Tuition Price", pch = 20, cex = 1, col = "blue")
+```
+
+### After some reserach, we learn that we can model a linear regression by our two formulas, B1 & B0, found [here](https://www.probabilitycourse.com/chapter8/8_5_2_first_method_for_finding_beta.php#:~:text=We%20can%20estimate%20%CE%B20,yi%E2%88%92%C2%AFy). We then can proceed with writing functions within R to simulate these.
+
+```{r}
+beta1 <- function(r, Sy, Sx){
+  B1 = r * (Sy/Sx)
+  return(B1)
+}
+
+beta0 <- function(r, Sy, Sx, y_bar, x_bar){
+  if (Sx > 0){
+  B1 = r * (Sy/Sx)
+  B0 = y_bar - B1*x_bar
+  } else {
+    B0 = NA
+    print("Sx = 0. Can't calculate B1!")
+  return(B0)
+  }
+}
+```
+
+### Now we can provide input to these functions from our dataset. Using the respective columns for each variable.:
+```{r}
+
+# Removing all NA values from the entire data set so as to be able to extract a total average. We otherwise receive an error after R is unable to properly process an average with NA values existing in the columns. 
+TuitionKeep = subset(tuition, select = c("Avg.SAT", "Out.Tuition"))
+EntireTuitionNoNA = na.omit(TuitionKeep)
+xBar = mean(EntireTuitionNoNA$Avg.SAT)
+yBar = mean(EntireTuitionNoNA$Out.Tuition)
+Sx = sd(EntireTuitionNoNA$Avg.SAT)
+Sy = sd(EntireTuitionNoNA$Out.Tuition)
+Rxy = cor(EntireTuitionNoNA$Avg.SAT, EntireTuitionNoNA$Out.Tuition)
+
+b0 = beta0(Rxy, Sy, Sx, yBar, xBar)
+b0
+```
+```{r}
+b1 = beta1(Rxy,Sy, Sx)
+b1
+```
+
+### Now that we have a Y-Intercept and a Slope, we can include our regression line into the graph from before by using the abline() function in R. This line optimally reduces the residuals for the datapoints.
+```{r}
+plot(tuition$Avg.SAT, tuition$Out.Tuition, main = "College Tuition Based on SAT Score", xlab = "SAT Score", ylab = "Tuition Price", pch = 20, cex = 1, col = "blue")
+
+abline(b0, b1)
+```
+
+
+### Writing yet another function that takes input explanatory variables x and y as well as a new variable, x_new, that we want to predict.
+```{r}
+predict_yval <- function(X, Y, x_new){
+  
+  xBar = mean(X)
+  yBar = mean(Y)
+  Sx = sd(X)
+  Sy = sd(Y)
+  Rxy = cor(X,Y)
+  
+  if (Sx > 0){
+    b0 = beta0(Rxy, Sy, Sx, yBar, xBar)
+    b1 = beta1(Rxy, Sy, Sx)
+    y_predict = b0 + b1 * x_new
+  } else {
+    y_predict = NA
+    print("Sx is <= 0, can't calculate.")
+  }
+  
+  
+  return( y_predict )
+}
+```
+
+### Using the function just created, we can see whether UNC provides a good education for the price:
+```{r}
+CH = tuition[tuition$Name == "University of North Carolina at Chapel Hill",]
+CHTuition = CH$Out.Tuition
+
+CHTuitionPredict = predict_yval(EntireTuitionNoNA$Avg.SAT, EntireTuitionNoNA$Out.Tuition, CH$Avg.SAT)
+
+#Is the actual UNC tuition cheaper than the predicted? 
+CHTuitionPredict
+CHTuition
+
+CHTuition < CHTuitionPredict
+
+#We can see that UNC provides a great education at a great price.
+```
+### We've seen how to do manually create a linear regression. R also has the lm() function that allows us to speed up this process as well as include other variables within it. Here, we have a multiple linear regression model where we adjust the public variable into a categorical variable using the factor() function. 
+
+### These included variables can help adjust expectations due to how a college's student population, spending per student, and average SAT Score can provide information about the kinds of students that attend as well as direction into what kinds of people may be currently donating to the institution.
+```{r}
+Mult <- lm(Out.Tuition ~ Size + Avg.SAT + Avg.ACT + Spending + factor(Public), data = tuition)
+summary(Mult)
+```
