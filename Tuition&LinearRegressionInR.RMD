@@ -23,22 +23,24 @@ tuition[tuition$Name == "University of North Carolina at Chapel Hill",]
 plot(tuition$Avg.SAT, tuition$Out.Tuition, main = "College Tuition Based on SAT Score", xlab = "SAT Score", ylab = "Tuition Price", pch = 20, cex = 1, col = "blue")
 ```
 
-### After some reserach, we learn that we can model a linear regression by our two formulas, B1 & B0, found [here](https://www.probabilitycourse.com/chapter8/8_5_2_first_method_for_finding_beta.php#:~:text=We%20can%20estimate%20%CE%B20,yi%E2%88%92%C2%AFy). We then can proceed with writing functions within R to simulate these.
+### After some reserach, we learn that we can model a linear regression by our two formulas which calculate slope and y intercept found [here](https://www.probabilitycourse.com/chapter8/8_5_2_first_method_for_finding_beta.php#:~:text=We%20can%20estimate%20%CE%B20,yi%E2%88%92%C2%AFy). We then can proceed with writing functions within R to simulate these.
 
 ```{r}
+# Creating manual linear regression functions where y_bar is our y data sample mean and x_bar is our x data sample mean.
+
 beta1 <- function(r, Sy, Sx){
-  B1 = r * (Sy/Sx)
-  return(B1)
+  slope = r * (Sy/Sx)
+  return(slope)
 }
 
 beta0 <- function(r, Sy, Sx, y_bar, x_bar){
   if (Sx > 0){
-  B1 = r * (Sy/Sx)
-  B0 = y_bar - B1*x_bar
+  slope = r * (Sy/Sx)
+  y_intercept = y_bar - slope*x_bar
   } else {
-    B0 = NA
-    print("Sx = 0. Can't calculate B1!")
-  return(B0)
+    y_intercept = NA
+    print("Sx = 0. Can't calculate the Slope!")
+  return(y_intercept)
   }
 }
 ```
@@ -71,7 +73,7 @@ abline(b0, b1)
 ```
 
 
-### Writing yet another function that takes input explanatory variables x and y as well as a new variable, x_new, that we want to predict.
+### Writing yet another function that takes input explanatory variables x and y as well as a new variable, x_new, that we want to predict. This way, we have our linear regression programmed and can now see if the actual price of a college is lower or higher than what our straight-line linear regression would predict.
 ```{r}
 predict_yval <- function(X, Y, x_new){
   
@@ -82,9 +84,9 @@ predict_yval <- function(X, Y, x_new){
   Rxy = cor(X,Y)
   
   if (Sx > 0){
-    b0 = beta0(Rxy, Sy, Sx, yBar, xBar)
-    b1 = beta1(Rxy, Sy, Sx)
-    y_predict = b0 + b1 * x_new
+    y_intercept = beta0(Rxy, Sy, Sx, yBar, xBar)
+    slope = beta1(Rxy, Sy, Sx)
+    y_predict = y_intercept + slope * x_new
   } else {
     y_predict = NA
     print("Sx is <= 0, can't calculate.")
