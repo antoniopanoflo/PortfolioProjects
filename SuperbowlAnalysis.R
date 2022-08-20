@@ -36,7 +36,8 @@ ggplot(NFL2013.Final, aes(x=TeamName, y=ScoreOff, fill = TeamName)) +
 
 # Considering how the Broncos played so well but the Seahawks won the superbowl later on, 
 # we test if the seahawks played abnormally well (sleep, performance-enhancing drugs).
-# *Would have to get performance for def if broncos were def but short on time.
+# Some games only had broncos on defense so in order to not leave out those scores, 
+# we create an entire vector where we merge both of them.
 
 SeahawksOff <- filter(NFL2013.Final, TeamName == "Seattle Seahawks") %>%
   mutate(SeahawkScores = ScoreOff)
