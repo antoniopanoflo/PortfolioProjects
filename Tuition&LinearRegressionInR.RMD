@@ -45,7 +45,7 @@ beta0 <- function(r, Sy, Sx, y_bar, x_bar){
 }
 ```
 
-### Now we can provide input to these functions from our dataset. Using the respective columns for each variable.:
+### Now we can provide input to these functions from our dataset. Using the respective columns for each variable:
 ```{r}
 
 # Removing all NA values from the entire data set so as to be able to extract a total average. We otherwise receive an error after R is unable to properly process an average with NA values existing in the columns. 
@@ -112,7 +112,7 @@ CHTuition < CHTuitionPredict
 
 #We can see that UNC provides a great education at a great price.
 ```
-### We've seen how to do manually create a linear regression. R also has the lm() function that allows us to speed up this process as well as include other variables within it. Here, we have a multiple linear regression model where we adjust the public variable into a categorical variable using the factor() function. 
+### We've seen how to manually create a linear regression. R also has the lm() function that allows us to speed up this process as well as include other variables within it. Here, we have a multiple linear regression model where we adjust the public variable into a categorical variable using the factor() function. 
 
 ### These included variables can help adjust expectations due to how a college's student population, spending per student, and average SAT Score can provide information about the kinds of students that attend as well as direction into what kinds of people may be currently donating to the institution.
 ```{r}
