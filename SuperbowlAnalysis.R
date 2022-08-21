@@ -60,9 +60,9 @@ SB2014Score <- 43
 # they played abnormally well.
 t.test(SeahawkGameScores, alt = "less", mu = SB2014Score, conf.level = 0.99)
 
-# ANSWER: The Seahawks did play abnormally well during their superbowl game,
-# at least when using their pre-season performance as indicators.
-# Had I had access to regular reason data, I could've made a 
+# ANSWER: The Seahawks did play abnormally well during their superbowl game.
+# If I wanted to feel more secure, I could go back to previous season games 
+# where the team had a similar roster and make a
 # conglomerate data set or better yet, a two sample t-test to preserve behavior.
 # Doesn't disprove their score though. This could've applied to their defensive behavior, too.
 
