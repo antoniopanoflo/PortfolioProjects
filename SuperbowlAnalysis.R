@@ -1,4 +1,4 @@
-# Data set for all pre-season 2013 football games.
+# Data set for all 2013 football games.
 NFL2013 <- read.csv('https://raw.githubusercontent.com/Carolina-Data-Challenge/datasets/main/FootballDatasets/NFL/CumulativeStats/nfl2013stats.csv')
 
 
