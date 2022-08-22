@@ -150,7 +150,8 @@ ggplot(plottable, aes(x=Year, y=Total.Score, colour = Year)) +
 
 
 # Although there hasn't been a steady increase in the average total 
-# sum score of the football games, in the past few years, 
+# sum score of the football games, from years 1978 - 2013 
 # that number was challenging records set in the previous century and 
 # ultimately, broke that record recently. You could say that football players
-# score on each other more frequently now. Doesn't necessarily mean they're better.
+# score on each other more frequently now. Doesn't necessarily mean they're better since 
+# opposing teams also exist to offset performances of the challengers.
