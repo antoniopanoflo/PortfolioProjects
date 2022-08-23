@@ -119,10 +119,6 @@ plot(Model, 1:2)
 # From our Normal Q-Q Plot, we notice that the model is mostly normal so we can carry on.
 
 
-## Only if we were trying to truly predict total score of offensive team, 
-## only then would QQ Plots be useful.
-
-
 
 #_______________________________________________________________________________
 
