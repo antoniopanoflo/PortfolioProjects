@@ -71,10 +71,10 @@ ggplot(data = archery,
 
 # We notice through our Residuals vs Fitted  plot that if an archer takes from around
 # 9.05 secs. to 9.35 secs. to shoot, our model actually predicts a lower score 
-# for their shot (less accuracy).
-
-# Most importantly, we notice a curve and determine that our data isn't best
+# for their shot (less accuracy) and predicts a higher score for seconds outside of that range.
+# We determine that our data isn't best
 # captured by a regular linear model. I go on to try a polynomial.
+
 plot(lm, 1)
 
 #_______________________________________________________________________________
