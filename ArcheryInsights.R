@@ -161,7 +161,7 @@ plot(jitter(Points) ~ Blinks, data = archery, ylab="Points", col = 2:21)
 #______________________________________________________________________________
 
 ### Another neat thing to do is to explore blinks ~ target distance
-### but that would be more useful if we had a wider variety in distances.
+### but that can only be done if we had a wider variety in distances.
 
 
 #_______________________________________________________________________________
