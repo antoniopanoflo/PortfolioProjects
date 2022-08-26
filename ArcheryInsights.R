@@ -42,7 +42,8 @@ archery <- union_all(papendal, not_papendal)
 
 ### Exploring Time to Shoot on accuracy (Point variable).
 
-
+# MAKE A BAR PLOT. THE ONE FROM YOUR PAPER. 
+# DIFFERENCE IN MEAN TIME TO SHOOT BETWEEN WINNERS AND LOSERS.
 # Avg time to shoot ~ win/lost
 
 
