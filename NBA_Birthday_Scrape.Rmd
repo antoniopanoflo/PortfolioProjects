@@ -1,0 +1,77 @@
+# Scrape Links - NBA.com
+```{r}
+
+
+### My attempt to scrape NBA player birthdays over multiple pages during a machine learning project in university-- returning only unique players.
+### My attempt didn't succeed but uploading to showcase willingness.
+
+library(RSelenium)
+library(rvest)
+library(XML)
+```
+
+```{r}
+# Use Selenium to Scrape NBA IDs
+
+Sys.setenv(PATH="C:\\Users\\ap3340\\Documents\\MATLAB\\sys\\java\\jre\\win64\\jre\\bin")
+
+rD <- rsDriver(browser="chrome", chromever = '89.0.4389.23', port = 3457L)
+remDr <- rD$client
+
+```
+
+```{r}
+
+#remDr <- remoteDriver(remoteServerAddr = "98.27.61.132", port = 4445L) 
+
+remDr$navigate("https://stats.nba.com/players/list/?Historic=Y")
+page <- remDr$getPageSource()[[1]]
+doc <- htmlParse(page)
+links <- as.character(xpathSApply(doc, "//a/@href"))
+links <- links[grepl("/player/[0-9]", links)]
+
+names_list <- {}
+for(i in 1:25){ # No players have last name starting with X
+  names <- remDr$findElements(using = 'xpath', paste0("/html/body/main/div[2]/div/div[2]/div/div/section[",i,"]"))
+  names <- unlist(lapply(names, function(x){x$getElementText()}))
+  names <- unlist(strsplit(names, "\n"))
+  names <- names[nchar(names) > 1]
+  names_list[i] <- list(names)
+}
+
+remDr$close()
+rD$server$stop()
+```
+
+
+```{r}
+# Format Names
+names <- unlist(names_list)
+names <- strsplit(as.character(names), ', ')
+first_names <- sapply(names, function(x) x[2])
+last_names <- sapply(names, function(x) x[1])
+names <- paste(first_names, last_names)
+links <- paste0('https://stats.nba.com', links)
+ids <- as.numeric(gsub("[^[:digit:]]", "", links))
+
+
+nba_ids <- data.frame(NBAName = names, NBALink = links, NBAID = ids)
+nba_ids$NBALink <- as.character(nba_ids$NBALink)
+```
+
+
+```{r}
+# Scrape Birthdays
+birthdays <- {}
+for(i in 1:nrow(nba_ids)){
+  webpage <- read_html(nba_ids$NBALink[i])
+  birthdays[i] <- webpage %>%
+    html_node(xpath = '/html/body/main/div[2]/div/div/div[2]/div/div/div/div[2]/div[2]/div[4]/span') %>%
+    html_text()
+}
+
+nba_ids$NBABirthDate <- birthdays
+nba_ids$NBABirthDate <- as.Date(nba_ids$NBABirthDate, format = '%m/%d/%Y')
+
+write.csv(nba_ids, 'NBAIDs.csv', row.names = F)
+```
