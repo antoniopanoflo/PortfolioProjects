@@ -12,7 +12,7 @@ library(dplyr)
 #OREB=Home OREB+Away OREB
 
 
-# All NBA games (matches) back from 2004.
+# All NBA games (matches) since 2004.
 GAMES=read.csv(url("https://raw.githubusercontent.com/mattymo18/STOR-538-Project2-2021/master/Source-Data/games.csv"))
 
 # All collected player details from the games mentioned in dataset GAMES. 
