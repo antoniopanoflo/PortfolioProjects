@@ -118,7 +118,31 @@ plot(Model, 1:2)
 
 # From our Normal Q-Q Plot, we notice that the model is mostly normal so we can carry on.
 
+#_______________________________________________________________________________
 
+#Using our found model, I subset 85% of the data for training and predict the other 15% team' scores.
+library(caTools)
+
+# Grabbing a vector of True's and False's based on percentage on rows from dataset.
+split <- sample.split(NFL2013.Final, SplitRatio = 0.8)
+# split == T: choosing the 80% out of the 100% from the data set.
+training_set <- subset(NFL2013.Final, split == TRUE)
+# split == F: choosing the remaining 20% out of the 100% from the data set.
+test_set <- subset(NFL2013.Final, split == FALSE)
+
+
+# linear model on trained data
+lm_train <- lm(ScoreOff ~ FirstDownOff+ThirdDownPctOff+RushYdsOff+PassYdsOff, data = training_set)
+
+# attempting to predict offensive scores using the variables we found.
+train_results <- predict(lm_train, training_set)
+
+# Extracting the MSE for our training linear regression on training data
+mean((training_set$ScoreOff - train_results)^2)
+mean(lm_train$residuals^2) # MSE=54.80887
+
+# MSE on our testing data (the 80%)
+mean((test_set$ScoreOff - train_results)^2) # MSE=110.2022
 
 #_______________________________________________________________________________
 
