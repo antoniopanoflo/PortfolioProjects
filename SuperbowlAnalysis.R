@@ -141,7 +141,7 @@ train_results <- predict(lm_train, training_set)
 mean((training_set$ScoreOff - train_results)^2)
 mean(lm_train$residuals^2) # MSE=54.80887
 
-# MSE on our testing data (the 80%)
+# MSE on our testing data (the 20%)
 mean((test_set$ScoreOff - train_results)^2) # MSE=110.2022
 
 #_______________________________________________________________________________
