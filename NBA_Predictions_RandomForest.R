@@ -104,21 +104,8 @@ predicting_data <- read.csv("final_data_bigger_version.csv") %>%
 
 set.seed(0)
 library(randomForest)
-# recall: random forests do not need training data as the process
-# itself uses bootstrap aggregation and grabs training data on its own
-# top pick best tree.
 
-# using the variables we added to see how 80% works on the 20%. 
-# this way, I can say I felt confident with it (grab mse or anything you can).
-# then after, I can perform random forest on the data we want to predict on.
-data.imputed <- rfImpute(Total ~ ., data = predicting_data, iter=10)
-
-
-# importance: Should importance of predictors be assessed?
 rf_model <- randomForest(Total ~ .,data=predicting_data, importance = TRUE)
-
-
-
 
 
 # DOING THE ACTUAL PREDICTIONS WITH THE NEW DATA
