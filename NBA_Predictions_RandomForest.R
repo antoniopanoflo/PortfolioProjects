@@ -112,7 +112,7 @@ rf_model <- randomForest(Total ~ .,data=predicting_data, importance = TRUE)
 
 # DOING THE ACTUAL PREDICTIONS WITH THE NEW DATA
 # this new data has same inputs as the most recent team's from most recent years from previous dataset.
-# Importing the games I want to predict on
+# Importing the games I want to predict on. This dataset has the actual scores that took place, as well.
 final_data <- read.csv("finalpredictions_with_variables.csv") %>%
   select(-c(Game_Date, Season))
 
@@ -120,5 +120,8 @@ final_data <- read.csv("finalpredictions_with_variables.csv") %>%
 predictions_for_total <- predict(rf_model, newdata=final_data)
 
 
+final_data$total <- predictions_for_total
 
+# Getting the root mean square error.
+sqrt( mean((final_data$True_Total - final_data$total)^2) ) # rmse = 20.11537.
 
