@@ -5,13 +5,12 @@ library(dplyr)
 #The primary goal of this project is to design models for prediction of three variables – Spread, Total, and OREB. Below you can find clear definitions of these three outcome variables.
 #The variables, Spread, Total, and OREB will all be evaluated by root mean squared error (RMSE).
 #MSE is highly biased for higher values. RMSE is better in terms of reflecting performance when dealing with large error values. RMSE is more useful when lower residual values are preferred.
-#It is imperative that you follow these specifications. Your group will be making predictions of the three variables for all NBA games between April 10 and April 30, inclusively.
+#These are predictions of the total variables for all NBA games between April 10 and April 30, inclusively.
 
 #Total=Home Points+Away Points
 
 
 
-#### * I 
 
 
 # All NBA games (matches) since 2004.
@@ -124,4 +123,15 @@ final_data$total <- predictions_for_total
 
 # Getting the root mean square error.
 sqrt( mean((final_data$True_Total - final_data$total)^2) ) # rmse = 20.11537.
+
+
+
+#### Using more 1000 trees instead of 500 to see if it improves (lowers) the RMSE.
+rf_model2 <- randomForest(Total ~ .,data=predicting_data, importance=T, ntree=1000)
+
+
+predictions_for_total_2 <- predict(rf_model2, newdata=final_data)
+final_data$total_rf2 <- predictions_for_total_2
+sqrt( mean((final_data$True_Total - final_data$total_rf2)^2) ) # rmse = 20.06479.
+
 
