@@ -7,9 +7,11 @@ library(dplyr)
 #MSE is highly biased for higher values. RMSE is better in terms of reflecting performance when dealing with large error values. RMSE is more useful when lower residual values are preferred.
 #It is imperative that you follow these specifications. Your group will be making predictions of the three variables for all NBA games between April 10 and April 30, inclusively.
 
-#Spread=Home Points−Away Points
 #Total=Home Points+Away Points
-#OREB=Home OREB+Away OREB
+
+
+
+#### * I 
 
 
 # All NBA games (matches) since 2004.
