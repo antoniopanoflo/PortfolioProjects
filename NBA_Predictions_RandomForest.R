@@ -91,3 +91,41 @@ SIMPLE_GAMES_OREB_DIV =
 
 # Exporting for teammates:
 write.csv(TURNIN, "C:\\Users\\ap3340\\Documents\\YOUR_STUFF\\Data_Analyst\\R_PROJECTS\\Datasets\\pre_final_data.csv")
+
+
+
+
+##### Beginning the Random Forest to predict Spread in our case.
+
+# Importing added variables that teammates included.
+predicting_data <- read.csv("final_data_bigger_version.csv") %>%
+  select(-c(1,2,Game_Date, Season, Points_Home, Points_Away, Home_Advantage, OReb_Home, OReb_Away, Spread, OReb)) %>%
+  tidyr::drop_na()
+
+set.seed(0)
+library(randomForest)
+# recall: random forests do not need training data as the process
+# itself uses bootstrap aggregation and grabs training data on its own
+# top pick best tree.
+
+# using the variables we added to see how 80% works on the 20%. 
+# this way, I can say I felt confident with it (grab mse or anything you can).
+# then after, I can perform random forest on the data we want to predict on.
+data.imputed <- rfImpute(Total ~ ., data = predicting_data, iter=10)
+
+
+# importance: Should importance of predictors be assessed?
+rf_model <- randomForest(Total ~ .,data=predicting_data, importance = TRUE)
+
+
+
+
+
+# DOING THE ACTUAL PREDICTIONS WITH THE NEW DATA
+# this new data has same inputs as the most recent team's from most recent years from previous dataset.
+# Importing the games I want to predict on
+final_data <- read.csv("finalpredictions_with_variables.csv") %>%
+  select(-c(Game_Date, Season))
+
+# Doing the predictions
+predictions_for_total <- predict(rf_model, newdata=final_data)
