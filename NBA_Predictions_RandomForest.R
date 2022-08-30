@@ -116,3 +116,7 @@ final_data <- read.csv("finalpredictions_with_variables.csv") %>%
 
 # Doing the predictions
 predictions_for_total <- predict(rf_model, newdata=final_data)
+
+
+
+
