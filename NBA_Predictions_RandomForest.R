@@ -129,9 +129,13 @@ sqrt( mean((final_data$True_Total - final_data$total)^2) ) # rmse = 20.11537.
 #### Using more 1000 trees instead of 500 to see if it improves (lowers) the RMSE.
 rf_model2 <- randomForest(Total ~ .,data=predicting_data, importance=T, ntree=1000)
 
-
 predictions_for_total_2 <- predict(rf_model2, newdata=final_data)
 final_data$total_rf2 <- predictions_for_total_2
-sqrt( mean((final_data$True_Total - final_data$total_rf2)^2) ) # rmse = 20.06479.
+
+# New RMSE of 20.17991
+sqrt(mean((final_data$True_Total - final_data$total_rf2)^2))
+# MAE of 15.45186
+# On average, I was never off by more than ~15 points.
+mean(abs(final_data$True_Total - final_data$total_rf2))
 
 
