@@ -165,12 +165,6 @@ lm_blinks <- lm(Points ~ poly(Blinks,2), data = archery)
 plot(lm_blinks,1)
 
 
-# talk about how this isn't that significant
-# but if we had more sample points for people who blink more and they followed the same trends,
-# talk about the heteroskedasticity and how that translate into
-# we don't know whether blah or blah and blah as blinks increase.
-# talk about how 
-
 ggplot(data = archery,
        mapping = aes(x = Blinks, y = Points)) +
   geom_jitter( shape = 19, size = 4) +
