@@ -99,14 +99,14 @@ summary(poly)
 
 
 
-# if raw = T, use raw and not orthogonal polynomials.
+# Opting out of using raw = T to avoid multicollinearity by using orthogonal degrees.
 ggplot(data = archery,
        mapping = aes(x = `Time to Shoot (s)`, y = Points)) +
   geom_jitter(colour = archery$`Time to Shoot (s)`, shape = 19, size = 4) +
   xlab("poly(Time To Shoot (seconds))") + ylab("Points") +
   geom_smooth(method='lm', 
               color='turquoise4', 
-              formula = y ~ poly(x, degree = 2, raw=T))
+              formula = y ~ poly(x, degree = 2, raw=F))
 
 
 
@@ -116,7 +116,7 @@ archery_updated <- archery[ !(archery$index %in% c(111,113,118)), ]
 
 
 # creating a polynomial regression again to see if coefficients have improved.
-poly_updated <- lm(Points ~ poly(`Time to Shoot (s)`, 2, raw=T), data = archery_updated)
+poly_updated <- lm(Points ~ poly(`Time to Shoot (s)`, 2, raw=F), data = archery_updated)
 summary(poly_updated)
 plot(poly_updated, 1)
 
@@ -130,7 +130,7 @@ ggplot(data = archery_updated,
   xlab("poly(Time To Shoot (seconds))") + ylab("Points") +
   geom_smooth(method='lm', 
               color='turquoise4', 
-              formula = y ~ poly(x, degree = 2, raw=T))
+              formula = y ~ poly(x, degree = 2, raw=F))
 
 
 #_______________________________________________________________________________
