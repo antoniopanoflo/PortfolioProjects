@@ -79,42 +79,30 @@ WHERE married = 'Yes'
 GROUP BY married;
 
 -- Of the students taking the 3 most popular majors, how many have 2 or more conditions? Their ratio from total students?
+-- How many don't have any conditions? Their ratio from total students?
 -- Using a Subquery within a CTE to extract this information.
 WITH setup AS (
 SELECT *,
-    CASE 
-    WHEN (depression = 'Yes' AND  anxiety        = 'YES') THEN 'Yes' 
-    WHEN (depression = 'Yes' AND `panic attacks` = 'YES') THEN 'Yes' 
-    WHEN (anxiety    = 'Yes' AND `panic attacks` = 'Yes') THEN 'Yes'  ELSE 'No' END AS two_or_more
-FROM (
-SELECT major,year, depression, anxiety, `panic attacks`
-FROM descriptions
-JOIN conditions
-	ON descriptions.id = conditions.match_id) AS sub
-)
-SELECT major, sum(two_or_more = 'Yes') AS two_or_more_conditions, COUNT(major) AS total_students_in_major,
-	round((sum(two_or_more = 'Yes')/COUNT(major)), 2) * 100 AS percent_of_students_with_two_or_more_conditions
-FROM setup
-GROUP BY major
-ORDER BY total_students_in_major DESC
-LIMIT 3;
-
--- Of the students taking the 3 most popular majors, how many don't have any conditions?
-WITH condition_free AS (
-SELECT *,
 	CASE 
-    WHEN (depression = 'NO' AND anxiety = 'No' AND `panic attacks` = 'No') THEN 'True'
-    ELSE 'False' END AS notsick
-FROM(
-SELECT major,year, depression, anxiety, `panic attacks`
+    WHEN (Depression = 'Yes' AND Anxiety = 'YES') THEN 'Atleast Two' 
+    WHEN (Depression = 'Yes' AND `Panic Attacks` = 'YES') THEN 'Atleast Two' 
+    WHEN (Anxiety = 'Yes' AND `Panic Attacks` = 'Yes') THEN 'Atleast Two' 
+    WHEN (Depression = 'NO' AND Anxiety = 'No' AND `Panic Attacks` = 'No') THEN 'No Condition'
+    ELSE 'Neither' END AS Condition_Num
+FROM (
+SELECT Major,Year, Depression, Anxiety, `Panic Attacks`
 FROM descriptions
 JOIN conditions
-	ON descriptions.id = conditions.match_id) AS Sub
+	ON descriptions.ID = conditions.Match_ID) AS Sub
 )
-SELECT major, sum(notsick = 'True') AS not_sick_Count , COUNT(major) AS total_students_in_major
-FROM condition_free
-GROUP BY major
-ORDER BY total_students_in_major DESC
+SELECT Major, sum(Condition_Num = 'Atleast Two') AS Two_Or_More_Conditions,
+	round((sum(Condition_Num = 'Atleast Two')/count(Major)), 2) * 100 AS Percent_of_Students_With_Two_Or_More_Conditions,
+    sum(Condition_Num = 'No Condition') AS Not_Sick_Count,
+	round((sum(Condition_Num = 'No Condition')/count(Major)), 2) * 100 AS Percent_of_Students_With_No_Conditions,
+    count(Major) AS Total_Students_In_Major
+FROM setup
+GROUP BY Major
+ORDER BY Total_Students_In_Major DESC
 LIMIT 3;
 
 -- Top Major For Males? Females?
