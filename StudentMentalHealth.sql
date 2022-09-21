@@ -127,3 +127,4 @@ GROUP BY gpa;
 
 -- We can see that the higher the GPA, the more anxious the students are!
 -- Could this mean that those with low GPA's have a lack of interest / those with high GPA's are worried about upkeeping their scores?
+-- These insights shine light into the mental health going on with students not only in the USA, but in the middle east, as well.
