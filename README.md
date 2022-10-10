@@ -1,6 +1,6 @@
 # PortfolioProjects
 
-In this portfolio, I have the latest projects I have been working on after having built a foundation with courses primarily in R programming & SQL at UNC-CH. 
+In this portfolio, I have all personal projects as well as my contributed code to group projects at UNC - Chapel Hill.
 
 
 
